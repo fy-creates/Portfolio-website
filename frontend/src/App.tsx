@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -10,22 +12,40 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FadeIn from './components/FadeIn';
 import RouteTracker from './components/RouteTracker';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
+
+// Admin pages are only ever used by one person (you) — no reason to ship
+// them in the bundle every visitor downloads.
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 function HomePage() {
   return (
     <>
       <Navbar />
-      <FadeIn><Hero /></FadeIn>
-      <FadeIn><About /></FadeIn>
-      <FadeIn><Experience /></FadeIn>
-      <FadeIn><Skills /></FadeIn>
-      <FadeIn><Projects /></FadeIn>
-      <FadeIn><DesignWork /></FadeIn>
-      <FadeIn><Contact /></FadeIn>
+      <main>
+        <Hero />
+        <FadeIn><About /></FadeIn>
+        <FadeIn><Experience /></FadeIn>
+        <FadeIn><Skills /></FadeIn>
+        <FadeIn><Projects /></FadeIn>
+        <FadeIn><DesignWork /></FadeIn>
+        <FadeIn><Contact /></FadeIn>
+      </main>
       <Footer />
     </>
+  );
+}
+
+function PageFade({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
@@ -36,11 +56,15 @@ function AppContent() {
   return (
     <>
       {!isAdmin && <RouteTracker />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
+      <Suspense fallback={<div className="min-h-screen bg-bg" />}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageFade><HomePage /></PageFade>} />
+            <Route path="/admin/login" element={<PageFade><AdminLogin /></PageFade>} />
+            <Route path="/admin" element={<PageFade><AdminDashboard /></PageFade>} />
+          </Routes>
+        </AnimatePresence>
+      </Suspense>
     </>
   );
 }

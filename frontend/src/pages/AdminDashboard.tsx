@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchDashboard, logout } from '../services/api';
 import { LogOut, Users, Eye, MessageSquare, Clock, AlertCircle } from 'lucide-react';
@@ -24,17 +24,13 @@ export default function AdminDashboard() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const data = await fetchDashboard();
       setMessages(data.messages);
       setStats(data.stats);
-    } catch (err: any) {
-      const msg = err.message || 'Unknown error';
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error';
       if (msg.includes('Unauthorized') || msg.includes('401')) {
         setError('Session expired. Redirecting to login...');
         setTimeout(() => {
@@ -47,7 +43,12 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- standard fetch-on-mount pattern, not a bug
+    loadData();
+  }, [loadData]);
 
   const handleLogout = () => {
     logout();

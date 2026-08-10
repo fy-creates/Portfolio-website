@@ -8,9 +8,13 @@ export interface GitHubRepoData {
 
 export function useGitHubStats(repoNames: string[]) {
   const [data, setData] = useState<Record<string, GitHubRepoData>>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(repoNames.length > 0);
 
   useEffect(() => {
+    if (repoNames.length === 0) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- standard fetch-on-mount pattern, not a bug
+    setLoading(true);
+
     const fetchRepos = async () => {
       const results: Record<string, GitHubRepoData> = {};
       
@@ -36,11 +40,7 @@ export function useGitHubStats(repoNames: string[]) {
       setLoading(false);
     };
 
-    if (repoNames.length > 0) {
-      fetchRepos();
-    } else {
-      setLoading(false);
-    }
+    fetchRepos();
   }, [repoNames]);
 
   return { data, loading };

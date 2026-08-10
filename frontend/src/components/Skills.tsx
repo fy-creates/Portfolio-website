@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { staggerContainer, staggerItem } from '../lib/motion';
+
 const traits = [
   { name: 'Learn', icon: '📚' },
   { name: 'Build', icon: '🛠️' },
@@ -79,38 +82,64 @@ export default function Skills() {
       {/* Mindset / Soft Skills */}
       <div className="mb-10">
         <p className="text-sm text-muted mb-4">Mindset</p>
-        <div className="flex flex-wrap gap-3">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          className="flex flex-wrap gap-3"
+        >
           {traits.map((trait) => (
-            <span
+            <motion.span
               key={trait.name}
+              variants={staggerItem}
+              whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-2 text-sm font-medium text-accent border border-accent/30 rounded-full px-4 py-2"
             >
               <span>{trait.icon}</span>
               {trait.name}
-            </span>
+            </motion.span>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Soft Skills */}
       <div className="mb-10">
         <p className="text-sm text-muted mb-4">Soft Skills</p>
-        <div className="flex flex-wrap gap-3">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          className="flex flex-wrap gap-3"
+        >
           {softSkills.map((skill) => (
-            <span
+            <motion.span
               key={skill.name}
+              variants={staggerItem}
+              whileHover={{ scale: 1.05 }}
               className="inline-flex items-center gap-2 text-sm font-medium text-fg bg-surface border border-surface/50 rounded-full px-4 py-2 hover:border-accent/30 transition-colors"
             >
               <span>{skill.icon}</span>
               {skill.name}
-            </span>
+            </motion.span>
           ))}
-        </div>
+        </motion.div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="grid md:grid-cols-2 gap-8"
+      >
         {skillCategories.map((cat) => (
-          <div key={cat.category} className="bg-surface border border-surface/50 rounded-2xl p-6">
+          <motion.div
+            key={cat.category}
+            variants={staggerItem}
+            className="bg-surface border border-surface/50 rounded-2xl p-6"
+          >
             <h3 className="font-display font-semibold text-fg mb-4">{cat.category}</h3>
             <div className="space-y-3">
               {cat.skills.map((skill) => (
@@ -125,9 +154,9 @@ export default function Skills() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

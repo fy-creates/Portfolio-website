@@ -1,3 +1,7 @@
+import { motion } from 'framer-motion';
+import CountUp from './CountUp';
+import { staggerContainer, staggerItem } from '../lib/motion';
+
 export default function HeroStats() {
   const stats = [
     { value: '2+', label: 'Years Coding' },
@@ -7,13 +11,21 @@ export default function HeroStats() {
   ];
 
   return (
-    <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-surface/50 pt-8">
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
+      className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-surface/50 pt-8"
+    >
       {stats.map((stat) => (
-        <div key={stat.label} className="text-center md:text-left">
-          <p className="font-display font-bold text-3xl md:text-4xl text-accent">{stat.value}</p>
+        <motion.div key={stat.label} variants={staggerItem} className="text-center md:text-left">
+          <p className="font-display font-bold text-3xl md:text-4xl text-accent">
+            <CountUp value={stat.value} />
+          </p>
           <p className="text-muted text-sm mt-1">{stat.label}</p>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }

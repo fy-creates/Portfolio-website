@@ -6,7 +6,23 @@ const adminRoutes = require('./routes/admin');
 const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
-app.use(cors());
+
+// Comma-separated list in FRONTEND_URL env var, e.g.
+// FRONTEND_URL=https://portfolio-website-ruby-nine-45.vercel.app,https://your-custom-domain.com
+const allowedOrigins = (process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow tools like curl/Postman (no origin header) and any explicitly listed origin
+    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+}));
 app.use(express.json());
 
 app.use('/api/contact', contactRoutes);

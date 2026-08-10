@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion';
 import { useGitHubStats } from '../hooks/useGitHubStats';
+import { staggerContainer, staggerItem } from '../lib/motion';
 
 const projects = [
   {
@@ -43,6 +45,8 @@ const projects = [
   },
 ];
 
+const repos = projects.map(p => p.githubRepo).filter(Boolean) as string[];
+
 const StarIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
 );
@@ -52,7 +56,6 @@ const ForkIcon = () => (
 );
 
 export default function Projects() {
-  const repos = projects.map(p => p.githubRepo).filter(Boolean) as string[];
   const { data: stats, loading } = useGitHubStats(repos);
 
   return (
@@ -64,15 +67,22 @@ export default function Projects() {
         A selection of applications, experiments, and production tools built across my journey.
       </p>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="grid md:grid-cols-2 gap-6"
+      >
         {projects.map((project) => {
           const isLive = project.status === 'Live';
           const repoStats = project.githubRepo ? stats[project.githubRepo] : null;
           const hasStats = repoStats && !loading;
 
           return (
-            <div
+            <motion.div
               key={project.name}
+              variants={staggerItem}
               className={`flex flex-col bg-surface rounded-2xl p-6 transition-all border border-surface/50 ${
                 isLive 
                   ? 'hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10' 
@@ -130,6 +140,7 @@ export default function Projects() {
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`View ${project.name} project`}
                   className="self-start text-sm font-medium text-accent hover:underline"
                 >
                   View Project →
@@ -139,10 +150,10 @@ export default function Projects() {
                   Coming Soon
                 </span>
               )}
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </section>
   );
 }

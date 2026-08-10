@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
+import { staggerContainer, staggerItem } from '../lib/motion';
 
 const designs = [
   {
@@ -23,19 +25,31 @@ export default function DesignWork() {
       <h2 className="font-display font-bold text-accent text-sm tracking-widest uppercase mb-4">Design Work</h2>
       <p className="text-muted max-w-xl mb-10">Brand identity, logos, e-flyers, and photo editing from FY Creative Studio.</p>
       
-      <div className="grid md:grid-cols-2 gap-6">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="grid md:grid-cols-2 gap-6"
+      >
         {designs.map((d) => (
-          <div
+          <motion.div
             key={d.id}
+            variants={staggerItem}
             className="group overflow-hidden rounded-2xl bg-surface border border-surface hover:border-accent transition-colors shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10"
           >
             <div className="aspect-[4/5] overflow-hidden">
-              <img
-                src={d.image}
-                alt={d.title}
-                loading="lazy"
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-              />
+              <picture>
+                <source srcSet={d.image.replace('.png', '.webp')} type="image/webp" />
+                <img
+                  src={d.image}
+                  alt={d.title}
+                  loading="lazy"
+                  width={736}
+                  height={920}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+              </picture>
             </div>
             <div className="p-5">
               <p className="text-xs font-medium text-accent uppercase tracking-wider">
@@ -48,9 +62,9 @@ export default function DesignWork() {
                 {d.description}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <a

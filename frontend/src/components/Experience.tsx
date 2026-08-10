@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { staggerContainer, staggerItem } from '../lib/motion';
+
 const experiences = [
   {
     role: 'Founder & Lead Designer',
@@ -41,9 +44,15 @@ export default function Experience() {
         From Design Gigs to Production Code
       </h3>
 
-      <div className="space-y-8">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="space-y-8"
+      >
         {experiences.map((exp, i) => (
-          <div key={i} className="relative pl-8 md:pl-0">
+          <motion.div key={i} variants={staggerItem} className="relative pl-8 md:pl-0">
             {i !== experiences.length - 1 && (
               <div className="absolute left-[11px] md:left-[calc(25%-11px)] top-8 bottom-[-32px] w-px bg-surface/50 hidden md:block" />
             )}
@@ -71,9 +80,9 @@ export default function Experience() {
                 </ul>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
