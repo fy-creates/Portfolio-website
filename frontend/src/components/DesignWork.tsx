@@ -68,7 +68,7 @@ export default function DesignWork() {
 
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <a
-          href="https://lowkeyfy.github.io/FYCREATIVESTUDIO/"
+          href="https://fy-creates.github.io/FYCREATIVESTUDIO/"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm text-bg bg-accent rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity"
@@ -77,7 +77,7 @@ export default function DesignWork() {
           <ExternalLink size={16} />
         </a>
         <a href="https://instagram.com/FY_CREATIVE_STUDIOS" target="_blank" rel="noopener noreferrer" className="text-sm text-fg border border-surface rounded-full px-4 py-2 hover:border-accent transition-colors">More on Instagram →</a>
-        <a href="https://github.com/LowkeyFY" target="_blank" rel="noopener noreferrer" className="text-sm text-fg border border-surface rounded-full px-4 py-2 hover:border-accent transition-colors">More on GitHub →</a>
+        <a href="https://github.com/fy-creates" target="_blank" rel="noopener noreferrer" className="text-sm text-fg border border-surface rounded-full px-4 py-2 hover:border-accent transition-colors">More on GitHub →</a>
       </div>
     </section>
   );

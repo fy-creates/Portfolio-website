@@ -35,11 +35,11 @@ const TikTokIcon = ({ size = 18 }: { size?: number }) => (
 );
 
 const socials = [
-  { name: "GitHub", url: "https://github.com/LowkeyFY", icon: GithubIcon },
+  { name: "GitHub", url: "https://github.com/fy-creates", icon: GithubIcon },
   { name: "Instagram", url: "https://www.instagram.com/FY_CREATIVE_STUDIOS", icon: InstagramIcon },
   { name: "X", url: "https://x.com/FY_lowkey", icon: XIcon },
   { name: "LinkedIn", url: "https://www.linkedin.com/in/ifeanyi-okorie-59a040313", icon: LinkedInIcon },
-  { name: "TikTok", url: "https://www.tiktok.com/@lowkey_fy", icon: TikTokIcon },
+  { name: "TikTok", url: "https://www.tiktok.com/@fy_creates", icon: TikTokIcon },
 ];
 
 export default function Footer() {
