@@ -19,4 +19,12 @@ const loginLimiter = rateLimit({
   skipSuccessfulRequests: true,
 });
 
-module.exports = { contactLimiter, loginLimiter };
+// Page views: public and unauthenticated, so cap it to stop table spam
+const pageviewLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+module.exports = { contactLimiter, loginLimiter, pageviewLimiter };

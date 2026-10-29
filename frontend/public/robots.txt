@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://portfolio-website-ruby-nine-45.vercel.app/sitemap.xml
+Sitemap: https://ifeanyiokorie.vercel.app/sitemap.xml

@@ -7,8 +7,12 @@ const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
 
+// Render (and most hosts) sit behind a reverse proxy. Without this, req.ip is the
+// proxy's IP, so every visitor shares one rate-limit bucket and analytics IPs are wrong.
+app.set('trust proxy', 1);
+
 // Comma-separated list in FRONTEND_URL env var, e.g.
-// FRONTEND_URL=https://portfolio-website-ruby-nine-45.vercel.app,https://your-custom-domain.com
+// FRONTEND_URL=https://portfolio-website-ruby-nine-45.vercel.app,https://yourdomain.com,https://www.yourdomain.com
 const allowedOrigins = (process.env.FRONTEND_URL || '')
   .split(',')
   .map((origin) => origin.trim())
@@ -20,10 +24,11 @@ app.use(cors({
     if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    return callback(new Error('Not allowed by CORS'));
+    // Reject without throwing so the browser gets a clean CORS failure, not a 500 stack trace
+    return callback(null, false);
   },
 }));
-app.use(express.json());
+app.use(express.json({ limit: '20kb' }));
 
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);

@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('../db');
+const { pageviewLimiter } = require('../middleware/rateLimiter');
 
 // Public: record a page view
-router.post('/pageview', async (req, res) => {
+router.post('/pageview', pageviewLimiter, async (req, res) => {
   try {
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null;
-    const userAgent = req.headers['user-agent'] || null;
-    const { path = '/' } = req.body;
+    // req.ip is the real client IP because 'trust proxy' is set in index.js.
+    // (The raw x-forwarded-for header can be spoofed and may hold several IPs.)
+    const ip = req.ip || null;
+    const userAgent = (req.headers['user-agent'] || '').slice(0, 300) || null;
+    const rawPath = typeof req.body?.path === 'string' ? req.body.path : '/';
+    const path = rawPath.startsWith('/') ? rawPath.slice(0, 200) : '/';
 
     await sql`
       INSERT INTO "PageView" (ip, "userAgent", path)
